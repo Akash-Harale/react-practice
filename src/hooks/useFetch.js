@@ -10,16 +10,22 @@ export const useFetch = (url = "") => {
     if (!url) return;
 
     const controller = new AbortController();
-    (() => {
+    (async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const response = axios.get(url, { signal: controller.signal });
+        const response = await axios.get(url, { signal: controller.signal });
         setData(response.data);
+      
+        setLoading(false);
       } catch (error) {
-        setError(error);
-        console.error(error);
+        if (error.name !== "CanceledError") {
+          setError(error);
+          console.error(error);
+        }
+      } finally {
+        setLoading(false);
       }
     })();
 
