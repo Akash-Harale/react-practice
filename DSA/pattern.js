@@ -37,12 +37,24 @@
 // 1 2 3 4
 // 1 2 3 4 5
 
+// let n = 5;
+
+// for (let i = 1; i <= n; i++) {
+//   let bag = "";
+//   for (let j = 1; j <= i; j++) {
+//     bag += ` ${j}`;
+//   }
+//   console.log(bag);
+// }
+
+// ----------------------------------
+
 let n = 5;
 
 for (let i = 1; i <= n; i++) {
   let bag = "";
   for (let j = 1; j <= i; j++) {
-    bag += ` ${j}`;
+    bag += ` ${i}`;
   }
   console.log(bag);
 }
