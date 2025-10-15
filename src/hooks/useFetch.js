@@ -1,13 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useDebounce } from "./useDebounce";
 
-export const useFetch = (url = "") => {
+export const useFetch = (url = "", id) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const debounceSearch = useDebounce(id, 3000);
 
   useEffect(() => {
-    if (!url) return;
+    if (!url || debounceSearch === "" || debounceSearch === undefined) return;
 
     const controller = new AbortController();
     (async () => {
@@ -15,10 +17,10 @@ export const useFetch = (url = "") => {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get(url, { signal: controller.signal });
+        const response = await axios.get(`${url}${debounceSearch}`, {
+          signal: controller.signal,
+        });
         setData(response.data);
-      
-        setLoading(false);
       } catch (error) {
         if (error.name !== "CanceledError") {
           setError(error);
@@ -32,6 +34,6 @@ export const useFetch = (url = "") => {
     return () => {
       controller.abort();
     };
-  }, [url]);
+  }, [url, debounceSearch]);
   return { loading, data, error };
 };

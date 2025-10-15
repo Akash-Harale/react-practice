@@ -1,25 +1,23 @@
-import "./App.css";
-import { useFetch } from "./hooks/useState";
+import { useState } from "react";
+import { useFetch } from "./hooks/useFetch";
 
-function App() {
-  const { data, loading, error } = useFetch(
-    "https://jsonplaceholder.typicode.com/todos/1"
-  );
-  const response = data?.data;
-  console.log(data?.data);
+const App = () => {
+  const [search, setSearch] = useState("");
+  const { data } = useFetch(import.meta.env.VITE_FAKE_API, search);
+  console.log(data);
 
-  if (loading) {
-    return <p style={{ color: "teal" }}>Loading...</p>;
-  }
-  if (error) {
-    return <p style={{ color: "red" }}> something went wrong</p>;
-  }
   return (
-    <div className="">
-      <p>userId: {response?.userId}</p>
-      <p>Id: {response?.title}</p>
+    <div>
+      <input
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
+        value={search}
+        type="number"
+        placeholder="search..."
+      />
     </div>
   );
-}
+};
 
 export default App;
